@@ -1,4 +1,5 @@
 Summary:	A GNOME hardware monitoring applet.
+Summary(pl):	Aplet GNOME monitoruj±cy sprzêt
 Name:		glms
 Version:	1.03
 Release:	10
@@ -29,6 +30,12 @@ The glms package contains a hardware monitoring applet for GNOME. The
 applet displays the temperature of processors, the speed of cooling
 fans, and power supply performance. You'll also need to have the
 lm_sensors package installed.
+
+%description -l pl
+Pakiet glms zawiera aplet monitoruj±cy sprzêt przeznaczony dla GNOME.
+Aplet pokazuje temperaturê procesorów, obroty wiatraczków ch³odz±cych
+i osi±gi  ¼ród³a zasilania. Musisz mieæ zainstalowany pakiet
+lm_sensors.
 
 %prep
 %setup -q
