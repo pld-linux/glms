@@ -5,11 +5,6 @@ Version:	1.03
 Release:	10
 License:	GPL
 Group:		X11/Applications
-Group(de):	X11/Applikationen
-Group(es):	X11/Aplicaciones
-Group(pl):	X11/Aplikacje
-Group(pt_BR):	X11/Aplicações
-Group(pt):	X11/Aplicações
 Source0:	http://www.kiss.uni-lj.si/~k4fe0277/%{name}-%{version}.tar.gz
 Source1:	%{name}_applet.desktop
 Patch1:		%{name}-redhat.patch
