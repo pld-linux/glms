@@ -5,14 +5,15 @@ Version:	1.03
 Release:	11
 License:	GPL
 Group:		X11/Applications
-Source0:	http://www.kiss.uni-lj.si/~k4fe0277/%{name}-%{version}.tar.gz
-# Source0-md5:	6b4aa206754209e798e52dacbd1a551b
+#Source0:	http://users.kiss.si/~k4fe0277/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.gz
+# Source0-md5:	ec5c664b5fdc6cbbc2bd04414d85c82e
 Source1:	%{name}_applet.desktop
 Patch1:		%{name}-redhat.patch
 Patch2:		%{name}-lm_sensors-2.5.5-patch
 Patch3:		%{name}-configure.patch.gz
 Patch4:		%{name}-ja.patch
-URL:		http://www.kiss.uni-lj.si/~k4fe0277/glms.html
+#URL:		http://users.kiss.si/~k4fe0277/glms.html
 ExclusiveArch:	%{ix86}
 Requires:	lm_sensors
 BuildRequires:	lm_sensors-devel
