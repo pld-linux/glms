@@ -1,0 +1,20 @@
+--- glms-1.03/po/ja.po~	Tue Oct 15 00:05:20 2002
++++ glms-1.03/po/ja.po	Tue Oct 15 00:06:04 2002
+@@ -14,7 +14,7 @@
+ "Content-Transfer-Encoding: 8bit\n"
+ 
+ #: glms_applet.c:7 glms_applet.c:239
+-msgid "ฐC"
++msgid "x"
+ msgstr "ลู"
+ 
+ #: glms_applet.c:76
+@@ -41,7 +41,7 @@
+ msgstr " F"
+ 
+ #: glms_applet.c:221
+-msgid " ฐC"
++msgid "y"
+ msgstr " ลู"
+ 
+ #: glms_applet.c:434
