@@ -48,8 +48,8 @@ cp -f %{SOURCE1} .
 
 %build
 aclocal -I /usr/share/aclocal/gnome
-automake -a -c -f
-autoconf
+%{__automake}
+%{__autoconf}
 %configure
 
 %{__make}
