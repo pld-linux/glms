@@ -9,17 +9,18 @@ Group:		X11/Applications
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	ec5c664b5fdc6cbbc2bd04414d85c82e
 Source1:	%{name}_applet.desktop
-Patch1:		%{name}-redhat.patch
-Patch2:		%{name}-lm_sensors-2.5.5-patch
-Patch3:		%{name}-configure.patch.gz
-Patch4:		%{name}-ja.patch
+Patch0:		%{name}-redhat.patch
+Patch1:		%{name}-lm_sensors-2.5.5-patch
+Patch2:		%{name}-configure.patch.gz
+Patch3:		%{name}-ja.patch
+Patch4:		%{name}-amfix.patch
 #URL:		http://users.kiss.si/~k4fe0277/glms.html
 ExclusiveArch:	%{ix86}
-Requires:	lm_sensors
-BuildRequires:	lm_sensors-devel
-BuildRequires:	gnome-libs-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	gnome-libs-devel
+BuildRequires:	lm_sensors-devel
+Requires:	lm_sensors
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/X11/GNOME
@@ -40,6 +41,7 @@ lm_sensors.
 
 %prep
 %setup -q
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -49,13 +51,15 @@ chmod u+x mkinstalldirs
 
 cp -f %{SOURCE1} .
 
+# "non-ascii character" - avoid rebuilding
+touch po/glms.pot
+
 %build
 rm -f missing
 %{__libtoolize}
 %{__aclocal} -I /usr/share/aclocal/gnome
 %{__automake}
 %{__autoconf}
-CFLAGS="%{rpmcflags} -I/usr/X11R6/include/gnome-1.0" ; export CFLAGS
 %configure
 
 %{__make}
@@ -63,9 +67,11 @@ CFLAGS="%{rpmcflags} -I/usr/X11R6/include/gnome-1.0" ; export CFLAGS
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-%find_lang %{name} --with-gnome
+# glms.mo but gnome/help/glms_applet
+%find_lang %{name} --with-gnome --all-name
 
 %clean
 rm -fr $RPM_BUILD_ROOT
@@ -75,5 +81,4 @@ rm -fr $RPM_BUILD_ROOT
 %doc AUTHORS NEWS README TODO
 %attr(755,root,root) %{_bindir}/*
 %{_datadir}/applets/Utility/*
-%{_datadir}/gnome/help/*
 %{_sysconfdir}/CORBA/servers/*
