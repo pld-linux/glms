@@ -47,7 +47,8 @@ chmod u+x mkinstalldirs
 cp -f %{SOURCE1} .
 
 %build
-aclocal -I /usr/share/aclocal/gnome
+rm -f missing
+%{__aclocal} -I /usr/share/aclocal/gnome
 %{__automake}
 %{__autoconf}
 %configure
@@ -59,17 +60,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-gzip -9nf AUTHORS NEWS README TODO
-
-%find_lang %name
+%find_lang %{name} --with-gnome
 
 %clean
 rm -fr $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc {AUTHORS,NEWS,README,TODO}.gz
+%doc AUTHORS NEWS README TODO
 %attr(755,root,root) %{_bindir}/*
 %{_datadir}/applets/Utility/*
-%{_datadir}/gnome/help/*
 %{_sysconfdir}/CORBA/servers/*
