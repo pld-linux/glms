@@ -9,4 +9,5 @@ Exec=glms_applet --activate-goad-server=glms_applet
 Icon=
 Terminal=0
 Type=Application
+Encoding=UTF-8
 # vi: encoding=utf-8
