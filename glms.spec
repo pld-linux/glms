@@ -1,4 +1,4 @@
-Summary:	A GNOME hardware monitoring applet.
+Summary:	A GNOME hardware monitoring applet
 Summary(pl):	Aplet GNOME monitoruj±cy sprzêt
 Name:		glms
 Version:	1.03
@@ -15,9 +15,10 @@ Patch3:		%{name}-configure.patch.gz
 URL:		http://www.kiss.uni-lj.si/~k4fe0277/glms.html
 ExclusiveArch:	%{ix86}
 Requires:	lm_sensors
-Requires:	gnome-libs
 BuildRequires:	lm_sensors-devel
 BuildRequires:	gnome-libs-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
@@ -34,7 +35,7 @@ lm_sensors package installed.
 %description -l pl
 Pakiet glms zawiera aplet monitoruj±cy sprzêt przeznaczony dla GNOME.
 Aplet pokazuje temperaturê procesorów, obroty wiatraczków ch³odz±cych
-i osi±gi  ¼ród³a zasilania. Musisz mieæ zainstalowany pakiet
+i osi±gi ¼ród³a zasilania. Musisz mieæ zainstalowany pakiet
 lm_sensors.
 
 %prep
@@ -45,7 +46,7 @@ lm_sensors.
 
 chmod u+x mkinstalldirs
 
-cp %{SOURCE1} .
+cp -f %{SOURCE1} .
 
 %build
 aclocal -I /usr/share/aclocal/gnome
@@ -53,7 +54,7 @@ automake -a -c
 autoconf
 %configure
 
-make
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
