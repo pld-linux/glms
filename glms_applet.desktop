@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Hardware sensors applet
-Name[ja]=¥Ï¡¼¥É¥¦¥§¥¢¥»¥ó¥µ¡¼¥¢¥×¥ì¥Ã¥È
+Name[ja]=ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢ã‚»ãƒ³ã‚µãƒ¼ã‚¢ãƒ—ãƒ¬ãƒƒãƒˆ
 Comment=Display your system procesor temperature
-Comment[ja]=¥·¥¹¥Æ¥à¥×¥í¥»¥Ã¥µ¤Î²¹ÅÙ¤òÉ½¼¨¤·¤Ş¤¹
+Comment[ja]=ã‚·ã‚¹ãƒ†ãƒ ãƒ—ãƒ­ã‚»ãƒƒã‚µã®æ¸©åº¦ã‚’è¡¨ç¤ºã—ã¾ã™
 Exec=glms_applet --activate-goad-server=glms_applet
 Icon=
 Terminal=0
 Type=Application
+# vi: encoding=utf-8
