@@ -2,7 +2,7 @@ Summary:	A GNOME hardware monitoring applet
 Summary(pl):	Aplet GNOME monitoruj±cy sprzêt
 Name:		glms
 Version:	1.03
-Release:	10
+Release:	11
 License:	GPL
 Group:		X11/Applications
 Source0:	http://www.kiss.uni-lj.si/~k4fe0277/%{name}-%{version}.tar.gz
@@ -10,6 +10,7 @@ Source1:	%{name}_applet.desktop
 Patch1:		%{name}-redhat.patch
 Patch2:		%{name}-lm_sensors-2.5.5-patch
 Patch3:		%{name}-configure.patch.gz
+Patch4:		%{name}-ja.patch
 URL:		http://www.kiss.uni-lj.si/~k4fe0277/glms.html
 ExclusiveArch:	%{ix86}
 Requires:	lm_sensors
@@ -41,6 +42,7 @@ lm_sensors.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 chmod u+x mkinstalldirs
 
@@ -48,9 +50,11 @@ cp -f %{SOURCE1} .
 
 %build
 rm -f missing
+%{__libtoolize}
 %{__aclocal} -I /usr/share/aclocal/gnome
 %{__automake}
 %{__autoconf}
+CFLAGS="%{rpmcflags} -I/usr/X11R6/include/gnome-1.0" ; export CFLAGS
 %configure
 
 %{__make}
@@ -70,4 +74,5 @@ rm -fr $RPM_BUILD_ROOT
 %doc AUTHORS NEWS README TODO
 %attr(755,root,root) %{_bindir}/*
 %{_datadir}/applets/Utility/*
+%{_datadir}/gnome/help/*
 %{_sysconfdir}/CORBA/servers/*
