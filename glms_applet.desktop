@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Hardware sensors applet
+Name[ja]=ハードウェアセンサーアプレット
+Comment=Display your system procesor temperature
+Comment[ja]=システムプロセッサの温度を表示します
+Exec=glms_applet --activate-goad-server=glms_applet
+Icon=
+Terminal=0
+Type=Application

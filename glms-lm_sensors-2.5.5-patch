@@ -1,0 +1,388 @@
+Binary files glms-1.03/.glms_applet.c.swp and glms-1.03.new/.glms_applet.c.swp differ
+Binary files glms-1.03/.lm.c.swp and glms-1.03.new/.lm.c.swp differ
+diff -urN glms-1.03/lm.c glms-1.03.new/lm.c
+--- glms-1.03/lm.c	Wed Feb  7 12:30:05 2001
++++ glms-1.03.new/lm.c	Wed Feb  7 12:11:59 2001
+@@ -21,15 +21,6 @@
+ #endif
+ 
+ #define MAX_FILENAME_LEN 128
+-#define LM75	0
+-#define LM78    1
+-#define LM78J   2
+-#define LM79    3
+-#define LM80    4
+-#define SIS5595 5
+-#define W83781D 6
+-#define W83782D 7
+-#define W83783S 8
+ 
+ #define CELCIUS 0
+ #define FAHRENHEIT 1
+@@ -41,9 +32,6 @@
+ static const char *config_file_path[] =
+ { "/etc", "/usr/lib/sensors", "/usr/local/lib/sensors", "/usr/lib",
+   "/usr/local/lib", ".", 0 };
+-/************************/
+-/* GetLimits() function */
+-/************************/
+ 
+ 
+ /* This examines global var config_file, and leaves the name there too.
+@@ -58,7 +46,6 @@
+ 
+ void open_config_file(void)
+ {
+-//#define MAX_FILENAME_LEN 1024
+   char *filename;
+   char buffer[MAX_FILENAME_LEN];
+   int res,i;
+@@ -96,265 +83,103 @@
+   }
+ }
+ 
+-
+-void GetLimits(double *temp_ll, double *temp2_ul, double *temp3_ul, double *temp1_ul, double *in0_ll, double *in0_ul, double *in1_ll, double *in1_ul, double *in2_ll, double *in2_ul, double *in3_ll, double *in3_ul, double *in4_ll, double *in4_ul, double *in5_ll, double *in5_ul, double *in6_ll, double *in6_ul)
++/*
++ * sensors_get_label_and_valid() function
++ *
++ * Taken directly from senors.c of the lm_sensors 2.5.5 package
++ *
++ */
++int sensors_get_label_and_valid(sensors_chip_name name, int feature, char **label, int *valid)
+ {
+-
+-  int errors, fd, len, lm75, lm7x, gl518, chip_nr;
+-  char *p;
+-  const sensors_chip_name *name;
+-
+-  /* We set the default limits; these will be used if reading fails. */
+-  *temp_ll = 20;
+-  *temp2_ul = 60;
+-  *temp3_ul = 60;
+-  *temp1_ul = 60;
+-  *in0_ll = 1.8;
+-  *in0_ul = 2.2;
+-  *in1_ll = 1.8;
+-  *in1_ul = 2.2;
+-  *in2_ll = 3.0;
+-  *in2_ul = 3.6;
+-  *in3_ll = 4.5;
+-  *in3_ul = 5.5;
+-  *in4_ll = 10.80;
+-  *in4_ul = 13.20;
+-  *in5_ll = -13.20;
+-  *in5_ul = -10.80;
+-  *in6_ll = -5.5;
+-  *in6_ul = -4.5;
+-
+-  errors = 0;
+-  lm75 = 0;
+-  lm7x = 0;
+-  gl518 = 0;
+-
+-  for (chip_nr = 0; (name = sensors_get_detected_chips(&chip_nr));)
+-  {
+-    if (!strcmp(name->prefix,"lm78") || !strcmp(name->prefix,"lm78-j") ||
+-        !strcmp(name->prefix,"lm79") || !strcmp(name->prefix,"sis5595") ||
+-	!strcmp(name->prefix,"lm80") || !strcmp(name->prefix,"w83781d") ||
+-	!strcmp(name->prefix,"w83782d") || !strcmp(name->prefix,"w83783s"))
+-
+-      /* Lots of chips are dealt with here as the same numbers correspond
+-	 to the same features across different chips. This is nice! */
+-
+-      if (!lm7x)
+-      {
+-	lm7x++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN0_MIN, in0_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN1_MIN, in1_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN2_MIN, in2_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN3_MIN, in3_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN4_MIN, in4_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN5_MIN, in5_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN6_MIN, in6_ul))
+-	  if (strcmp(name->prefix,"adm9240"))
+-	    errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN0_MAX, in0_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN1_MAX, in1_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN2_MAX, in2_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN3_MAX, in3_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN4_MAX, in4_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN5_MAX, in5_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN6_MAX, in6_ll))
+-	  if (strcmp(name->prefix,"adm9240"))
+-	    errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_TEMP_OVER, temp1_ul))
+-	  errors++;
+-        if (!strcmp(name->prefix,"w83781d")) {
+-	  if (sensors_get_feature(*name,SENSORS_W83781D_TEMP2_OVER, temp2_ul))
+-	    errors++;
+-	  if (sensors_get_feature(*name,SENSORS_W83781D_TEMP3_OVER, temp3_ul))
+-	    errors++;
+-	}
+-      }
+-    if (!strcmp(name->prefix,"gl518sm-r00") ||
+-	!strcmp(name->prefix,"gl518sm-r80"))
+-      if (!gl518)
+-      {
+-	gl518++;
+-	if (sensors_get_feature(*name, SENSORS_GL518_VDD_MIN, in0_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518_VIN1_MIN, in1_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518_VIN2_MIN, in2_ll))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_VIN3_MIN, in3_ll))
+-	  errors++;
+-	if (sensors_get_feature(*name, SENSORS_GL518_VDD_MAX, in0_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518_VIN1_MAX, in1_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518_VIN2_MAX, in2_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_VIN3_MAX, in3_ul))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_TEMP_OVER, temp1_ul))
+-	  errors++;
+-      }
+-      if (!strcmp(name->prefix,"lm75"))
+-      {
+-        if (!lm75)
+-        {
+-	  lm75++;
+-	  if (sensors_get_feature(*name,SENSORS_LM75_TEMP_OVER,temp2_ul))
+-	    errors++;
+-        }
+-        else if (lm75==1)
+-          if (sensors_get_feature(*name,SENSORS_LM75_TEMP_OVER,temp3_ul))
+-	    errors++;
+-      }
++  int err;
++  err = sensors_get_label(name,feature,label);
++  if (!err)
++    err = sensors_get_ignored(name,feature);
++  if (err >= 0) {
++    *valid = err;
++    err = 0;
+   }
++  return err;
+ }
+ 
+-
+ /********************/
+ /* GetLm() function */
+ /********************/
+ 
+ void GetLm(double *temp2, double *temp3, double *temp1, double *in0, double *in1, double *in2, double *in3, double *in6, double *in4, double *in5, double *fan1, double *fan2, double *fan3, int multiple_lm75, double *alrms)
+-{ 
+-  char buffer[32];
+-  int errors, fd, len, lm75, lm7x, gl518, buggy_gl518, chip_nr;
+-  char *p;
++{
++  int chip_nr, a, b, valid;
+   const sensors_chip_name *name;
+-
+-  *temp1 = -279;
+-  *temp2 = -279;
+-  *temp3 = -279;
+-
+-  *in0 = -279; 
+-  *in1 = -279;
+-  *in2 = -279;
+-  *in3 = -279;
+-  *in4 = -279;
+-  *in5 = -279;
+-  *in6 = -279;
+-  *fan1 = 0;
+-  *fan2 = 0;
+-  *fan3 = 0;  
++  const sensors_feature_data *data;
++  char *label;
++  double val;
++
++  *temp1 = -100;
++  *temp2 = -100;
++  *temp3 = -100;
++
++  *in0 = -100; 
++  *in1 = -100;
++  *in2 = -100;
++  *in3 = -100;
++  *in4 = -100;
++  *in5 = -100;
++  *in6 = -100;
++  *fan1 = 110;
++  *fan2 = 110;
++  *fan3 = 110;  
+ 
+   /* Here comes the real code... */
+-  errors = 0;
+-  lm75 = 0; /* The variables check we haven't already found one of   */
+-  lm7x = 0; /* the relevant type of sensor chip and read its values. */
+-  gl518 = 0;
+-  buggy_gl518 = 0;
+-
+   for (chip_nr = 0; (name = sensors_get_detected_chips(&chip_nr));)
+   {
+-    if (!strcmp(name->prefix,"lm78") || !strcmp(name->prefix,"lm78-j") ||
+-        !strcmp(name->prefix,"lm79") || !strcmp(name->prefix,"sis5595") ||
+-	!strcmp(name->prefix,"lm80") || !strcmp(name->prefix,"w83781d"))
+-
+-      /* Lots of chips are dealt with here as Frodo has used the same
+-	 numbers to index its features as to index the corresponding
+-	 LM78 feature. This is nice! */
+-
+-      if (!lm7x)
+-      {
+-	lm7x++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN0, in0))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN1, in1))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN2, in2))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN3, in3))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN4, in4))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN5, in5))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_IN6, in6))
+-	  if (strcmp(name->prefix,"adm9240"))
+-	    errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_TEMP, temp1))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_FAN1, fan1))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_FAN2, fan2))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_LM78_FAN3, fan3))
+-	  if (!(!strcmp(name->prefix,"adm9240") ||
+-		!strcmp(name->prefix,"lm80")))
+-	    errors++; /* These chips only have two fans */
+-	if (sensors_get_feature(*name,SENSORS_LM78_ALARMS, alrms))
+-	  errors++;
+-        if (!strcmp(name->prefix,"w83781d")) {
+-	  if (sensors_get_feature(*name,SENSORS_W83781D_TEMP2, temp2))
+-	    errors++;
+-	  if (sensors_get_feature(*name,SENSORS_W83781D_TEMP3, temp3))
+-	    errors++;
+-	  if (sensors_get_feature(*name,SENSORS_W83781D_ALARMS, alrms))
+-	    errors++;
+-	}
+-      }
+-    if (!strcmp(name->prefix,"gl518sm-r00") ||
+-	!strcmp(name->prefix,"gl518sm-r80"))
+-      if (!gl518)
+-      {
+-	gl518++;
+-	if (!strcmp(name->prefix,"gl518sm-r00"))
+-	  buggy_gl518 = 1;
+-	if (!buggy_gl518 && sensors_get_feature(*name,
+-						SENSORS_GL518_VDD, in0))
+-	  errors++;
+-        if (buggy_gl518 && sensors_get_feature(*name,
+-					       SENSORS_GL518_VIN1, in1))
+-	  errors++;
+-        if (buggy_gl518 && sensors_get_feature(*name,
+-					       SENSORS_GL518_VIN2, in2))
+-	  errors++;
+-
+-	/* The above aren't expected to work for rev 00 chips, but there *
+-	 * is a klugey hack in existence where the limits are used to    *
+-         * binary-search for the value; in this case I suppose it might. *
+-	 * No errors are generated for rev 00 chips.                     */
+-
+-	/* The rest should work for all gl518s. */
+-        if (sensors_get_feature(*name,SENSORS_GL518_VIN3, in3))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_TEMP, temp1))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_FAN1, fan1))
+-	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518_FAN2, fan2))
+-	  errors++;
+-	if (sensors_get_feature(*name,SENSORS_GL518_ALARMS, alrms))
+-	  errors++;
++    /*
++     * Big fat patch here: Instead of dealing with ever newer and newer
++     * chips we simply treat this as a unknown chipset and read out the data
++     * we find and put that in the corresponding fields. That usually works
++     * very well and doesn't need the app to be repatchd each and every time a
++     * new chipset/driver is added to lm_sensors
++     */
++    a=b=0;
++    while((data=sensors_get_all_features(*name,&a,&b))) {
++      if (sensors_get_label_and_valid(*name,data->number,&label,&valid))
++        continue;
++
++      if (!valid)
++        continue;
++
++      if (data->mode & SENSORS_MODE_R) {
++        if(sensors_get_feature(*name,data->number,&val))
++            continue;
++
++        if      (!strcmp("temp1", data->name))
++            *temp1 = val;
++        else if (!strcmp("temp2", data->name))
++            *temp2 = val;
++        else if (!strcmp("temp3", data->name))
++            *temp3 = val;
++        else if (!strcmp("in0", data->name))
++            *in0 = val;
++        else if (!strcmp("in1", data->name))
++            *in1 = val;
++        else if (!strcmp("in2", data->name))
++            *in2 = val;
++        else if (!strcmp("in3", data->name))
++            *in3 = val;
++        else if (!strcmp("in4", data->name))
++            *in4 = val;
++        else if (!strcmp("in5", data->name))
++            *in5 = val;
++        else if (!strcmp("in6", data->name))
++            *in6 = val;
++        else if (!strcmp("fan1", data->name))
++            *fan1 = val;
++        else if (!strcmp("fan2", data->name))
++            *fan2 = val;
++        else if (!strcmp("fan3", data->name))
++            *fan3 = val;
++        else if (!strcmp("alarms", data->name))
++            *alrms = val;
+       }
+-      if (!strcmp(name->prefix,"lm75"))
+-      {
+-        if (!lm75)
+-        {
+-	  lm75++;
+-	  if (sensors_get_feature(*name,SENSORS_LM75_TEMP,temp2))
+-            errors++;
+-        }
+-        else if (lm75==1)
+-          if (sensors_get_feature(*name,SENSORS_LM75_TEMP,temp3))
+-            errors++;
+-      }
+-  }
+-
+-  if (errors) {
+-    sensors_cleanup();
+-    errors = sensors_init(config_file);
+-    fprintf(stderr,"sensors_init returned %i\n",errors);
+-    fprintf(stderr,"Warning: errors occurred reading data. Possibly the sensors interface module\nhas changed while wmsensors is running.\n Attempted to correct this by restarting libsensors.\nFor now, this will cause libsensors to return incorrect values.\n");
++    }
+   }
+ }

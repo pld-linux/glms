@@ -1,0 +1,104 @@
+--- glms-1.03/Makefile	Tue Sep  7 17:27:55 1999
++++ glms-1.03/Makefile	Mon Jun 12 15:59:33 2000
+@@ -40,12 +40,15 @@
+ 	rm -f ${objs} ${target} core
+ 
+ install: ${target}
+-	install -c -m755 ${target} ${bindir}/${target}
+-	install -c -m644 ${target}.desktop ${sharedir}/applets/Utility/${target}.desktop
+-	install -c -m644 ${target}.gnorba ${etcdir}/${target}.gnorba
+-	install -dc -m555 ${prefix}/share/gnome/help/${target}/C
+-	install -c -m644 ${helpfile} ${prefix}/share/gnome/help/glms_applet/C/${helpfile}
+-	install -c -m644 ${screenimg1} ${prefix}/share/gnome/help/glms_applet/C/${screenimg1}
++	install -dc -m755 ${DESTDIR}${bindir}
++	install -c -m755 ${target} ${DESTDIR}${bindir}/${target}
++	install -dc -m755 ${DESTDIR}${sharedir}/applets/Utility
++	install -c -m644 ${target}.desktop ${DESTDIR}${sharedir}/applets/Utility/${target}.desktop
++	install -dc -m755 ${DESTDIR}${etcdir}
++	install -c -m644 ${target}.gnorba ${DESTDIR}${etcdir}/${target}.gnorba
++	install -dc -m755 ${DESTDIR}${prefix}/share/gnome/help/${target}/C
++	install -c -m644 ${helpfile} ${DESTDIR}${prefix}/share/gnome/help/glms_applet/C/${helpfile}
++	install -c -m644 ${screenimg1} ${DESTDIR}${prefix}/share/gnome/help/glms_applet/C/${screenimg1}
+         
+ 
+ uninstall: 
+--- glms-1.03/lm.c	Tue Sep  7 17:27:55 1999
++++ glms-1.03/lm.c	Mon Jun 12 15:58:10 2000
+@@ -186,23 +186,23 @@
+       if (!gl518)
+       {
+ 	gl518++;
+-	if (sensors_get_feature(*name, SENSORS_GL518R00_VDD_MIN, in0_ll))
++	if (sensors_get_feature(*name, SENSORS_GL518_VDD_MIN, in0_ll))
+ 	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518R00_VIN1_MIN, in1_ll))
++        if (sensors_get_feature(*name, SENSORS_GL518_VIN1_MIN, in1_ll))
+ 	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518R00_VIN2_MIN, in2_ll))
++        if (sensors_get_feature(*name, SENSORS_GL518_VIN2_MIN, in2_ll))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_VIN3_MIN, in3_ll))
++        if (sensors_get_feature(*name,SENSORS_GL518_VIN3_MIN, in3_ll))
+ 	  errors++;
+-	if (sensors_get_feature(*name, SENSORS_GL518R00_VDD_MAX, in0_ul))
++	if (sensors_get_feature(*name, SENSORS_GL518_VDD_MAX, in0_ul))
+ 	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518R00_VIN1_MAX, in1_ul))
++        if (sensors_get_feature(*name, SENSORS_GL518_VIN1_MAX, in1_ul))
+ 	  errors++;
+-        if (sensors_get_feature(*name, SENSORS_GL518R00_VIN2_MAX, in2_ul))
++        if (sensors_get_feature(*name, SENSORS_GL518_VIN2_MAX, in2_ul))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_VIN3_MAX, in3_ul))
++        if (sensors_get_feature(*name,SENSORS_GL518_VIN3_MAX, in3_ul))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_TEMP_OVER, temp1_ul))
++        if (sensors_get_feature(*name,SENSORS_GL518_TEMP_OVER, temp1_ul))
+ 	  errors++;
+       }
+       if (!strcmp(name->prefix,"lm75"))
+@@ -311,13 +311,13 @@
+ 	if (!strcmp(name->prefix,"gl518sm-r00"))
+ 	  buggy_gl518 = 1;
+ 	if (!buggy_gl518 && sensors_get_feature(*name,
+-						SENSORS_GL518R00_VDD, in0))
++						SENSORS_GL518_VDD, in0))
+ 	  errors++;
+         if (buggy_gl518 && sensors_get_feature(*name,
+-					       SENSORS_GL518R00_VIN1, in1))
++					       SENSORS_GL518_VIN1, in1))
+ 	  errors++;
+         if (buggy_gl518 && sensors_get_feature(*name,
+-					       SENSORS_GL518R00_VIN2, in2))
++					       SENSORS_GL518_VIN2, in2))
+ 	  errors++;
+ 
+ 	/* The above aren't expected to work for rev 00 chips, but there *
+@@ -326,15 +326,15 @@
+ 	 * No errors are generated for rev 00 chips.                     */
+ 
+ 	/* The rest should work for all gl518s. */
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_VIN3, in3))
++        if (sensors_get_feature(*name,SENSORS_GL518_VIN3, in3))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_TEMP, temp1))
++        if (sensors_get_feature(*name,SENSORS_GL518_TEMP, temp1))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_FAN1, fan1))
++        if (sensors_get_feature(*name,SENSORS_GL518_FAN1, fan1))
+ 	  errors++;
+-        if (sensors_get_feature(*name,SENSORS_GL518R00_FAN2, fan2))
++        if (sensors_get_feature(*name,SENSORS_GL518_FAN2, fan2))
+ 	  errors++;
+-	if (sensors_get_feature(*name,SENSORS_GL518R00_ALARMS, alrms))
++	if (sensors_get_feature(*name,SENSORS_GL518_ALARMS, alrms))
+ 	  errors++;
+       }
+       if (!strcmp(name->prefix,"lm75"))
+@@ -357,4 +357,4 @@
+     fprintf(stderr,"sensors_init returned %i\n",errors);
+     fprintf(stderr,"Warning: errors occurred reading data. Possibly the sensors interface module\nhas changed while wmsensors is running.\n Attempted to correct this by restarting libsensors.\nFor now, this will cause libsensors to return incorrect values.\n");
+   }
+-}
+\ No newline at end of file
++}
