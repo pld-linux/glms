@@ -1,0 +1,11 @@
+--- glms-1.03/Makefile.am.orig	Fri Jul  4 15:21:24 2003
++++ glms-1.03/Makefile.am	Fri Jul  4 15:25:27 2003
+@@ -9,7 +9,7 @@
+ INCLUDES =	-I$(srcdir)					\
+ 		-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
+ 		-I$(includedir)					\
+-		-I$(GNOME_INCLUDEDIR)
++		$(GNOME_INCLUDEDIR)
+ 
+ bin_PROGRAMS = glms_applet
+ 
