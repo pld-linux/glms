@@ -6,6 +6,7 @@ Release:	11
 License:	GPL
 Group:		X11/Applications
 Source0:	http://www.kiss.uni-lj.si/~k4fe0277/%{name}-%{version}.tar.gz
+# Source0-md5:	6b4aa206754209e798e52dacbd1a551b
 Source1:	%{name}_applet.desktop
 Patch1:		%{name}-redhat.patch
 Patch2:		%{name}-lm_sensors-2.5.5-patch
