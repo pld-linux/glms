@@ -15,12 +15,13 @@ Patch2:		%{name}-configure.patch.gz
 Patch3:		%{name}-ja.patch
 Patch4:		%{name}-amfix.patch
 #URL:		http://users.kiss.si/~k4fe0277/glms.html
-ExclusiveArch:	%{ix86}
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gnome-libs-devel
+BuildRequires:	libtool
 BuildRequires:	lm_sensors-devel
 Requires:	lm_sensors
+ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/X11/GNOME
