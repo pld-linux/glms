@@ -1,5 +1,5 @@
 Summary:	A GNOME hardware monitoring applet
-Summary(pl.UTF-8):   Aplet GNOME monitorujący sprzęt
+Summary(pl.UTF-8):	Aplet GNOME monitorujący sprzęt
 Name:		glms
 Version:	1.03
 Release:	11
