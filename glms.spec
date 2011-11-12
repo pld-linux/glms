@@ -12,6 +12,7 @@ Source1:	%{name}_applet.desktop
 Patch0:		%{name}-redhat.patch
 Patch1:		%{name}-lm_sensors-2.5.5-patch
 Patch2:		%{name}-configure.patch.gz
+# Patch2-md5:	981cf54a80f453df4b3f41a6a6dada42
 Patch3:		%{name}-ja.patch
 Patch4:		%{name}-amfix.patch
 #URL:		http://users.kiss.si/~k4fe0277/glms.html
